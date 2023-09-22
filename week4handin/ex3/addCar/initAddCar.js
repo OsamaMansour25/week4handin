@@ -1,5 +1,5 @@
-import { SERVER_URL } from "../../settings.js";
-import { makeOptions } from "../../utils.js";
+import { SERVER_URL } from "../settings.js";
+import { makeOptions } from "../utils.js";
 
 export function initAddCar() {
     // Attach an event listener to the "Add Car" button

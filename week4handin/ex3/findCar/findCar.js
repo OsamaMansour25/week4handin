@@ -1,5 +1,5 @@
 
-import { SERVER_URL } from "../../settings.js"
+import { SERVER_URL } from "../settings.js"
 
 export function initFindCar() {
   document.getElementById("result").innerText = ""
