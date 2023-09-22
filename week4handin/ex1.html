@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <h3>Find a single user</h3>
+    <label for="text-for-id">Id</label>&nbsp;<input id="text-for-id"/>
+    <button id="find-user">Find</button>
+    <p id = "found-user">searched user</p>
+</div>
+<div>
+    <h3>Show all users</h3>
+    <button id="btn-get-all">Get all</button>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+        </tr>
+        </thead>
+        <tbody id="user-table"></tbody>
+    </table>
+    <p>Show what you find here</p>
+</div>
+<script>
+    const SERVER_URL = "https://jsonplaceholder.typicode.com/users"
+    document.getElementById('btn-get-all').addEventListener('click', getAllUsers)
+    document.getElementById('find-user').addEventListener('click', getAUser)
+
+
+    function getAllUsers() {
+        console.log("button clicked!")
+        // Make a GET request to your API endpoint
+        fetch(SERVER_URL)
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data and update the table
+                const userTable = document.getElementById('user-table');
+
+                const tableRows = data.map(user => `
+                    <tr>
+                        <td>${user.name}</td>
+                        <td>${user.phone}</td>
+                    </tr>
+                `).join('');
+
+                userTable.innerHTML = tableRows; // Update the table content
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    function getAUser() {
+        const id = document.getElementById("text-for-id").value
+        fetch(SERVER_URL + "/" + id)
+            .then(res => {
+                if (!res.ok) {
+                    return alert("User Not Found")
+                }
+                return res.json()
+            })
+            .then(user => {
+                document.getElementById("found-user").innerText = JSON.stringify(user, null, 2)
+            })
+    }
+// async function version of it? idk
+async function getAUserSync() {
+    try {
+        // Make a GET request to your API endpoint
+        const response = await fetch(SERVER_URL);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Handle the response data and update the table
+        const userTables = document.getElementById('user-table');
+
+        userTables.innerHTML = data.map(user => `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>${user.phone}</td>
+                </tr>
+            `).join(''); // Update the table content
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+</script>
+</body>
+</html>
